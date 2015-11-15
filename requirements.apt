@@ -1,0 +1,10 @@
+python-dev
+libmysqlclient-dev
+libatlas-dev
+liblapack-dev
+gfortran
+build-essential
+libxml2-dev
+libxslt1-dev
+libtidy-dev
+libncurses5-dev

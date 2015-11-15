@@ -1,0 +1,26 @@
+fastfood:
+    build: .
+    command: bash -c "python run.py"
+    volumes:
+        - ./fastfood:/urs/src/app/fastfood
+    ports:
+        - "8080:8080"
+    environment:
+        - db_path=mysql+pymysql://ba67ba5e8674a9:899cbd63@us-cdbr-iron-east-03.cleardb.net/heroku_f5bea19f4318e6d
+    links:
+        - redis
+        - mysql
+
+redis:
+    image: redis
+    ports:
+        - "6379:6379"
+    volumes: 
+        - /opt/data/redis/:/data
+
+mysql:
+    image: mysql:5.6
+    volumes:
+        - /data/mysql:/var/lib/mysql
+    environment:
+        - MYSQL_ROOT_PASSWORD=sa
