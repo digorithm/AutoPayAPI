@@ -42,5 +42,13 @@ class User(Base):
     name = Column(String(45), nullable=False)
     organization = Column(ForeignKey(u'organization.id'), nullable=False, index=True)
     rfid = Column(String(45))
+    role = Column(Integer)
+    password = Column(String(100), nullable=False)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     organization1 = relationship(u'Organization')

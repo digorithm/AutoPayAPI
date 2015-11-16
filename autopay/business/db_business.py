@@ -67,7 +67,7 @@ class EventBO(CrudBO):
 class UserBO(CrudBO):
 
     model = User
-    model_selections = ['id', 'name', 'organization', 'rfid']
+    model_selections = ['id', 'name', 'organization', 'rfid', 'role']
 
     def get_rfid_from_org(self, rfid, org_id):
         query = self._session.query(self.model)\
@@ -76,6 +76,22 @@ class UserBO(CrudBO):
         
         obj = self.get_from(query)
         return obj
+
+    def create_user(self, name, org_id, pw, tag=None, role=1):
+        user = User(name=name, organization=org_id, rfid=tag)
+        user.set_password(pw)
+
+        return self._create(user, return_id=True)
+
+    def auth_user(self, name, password):
+        query = self._session.query(self.model).filter(self.model.name == name)
+        user = self.get_from(query, return_obj=True)
+        if not user:
+            return
+        if user.check_password(password):
+            user_data = self.get(user.id)
+            return user_data
+        return
 
 
 class OrganizationBO(CrudBO):

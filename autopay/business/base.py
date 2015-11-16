@@ -43,14 +43,16 @@ class CrudBO(BaseBO):
             self._session.close()
             db.engine.dispose()
 
-    def get_from(self, query, selections=None):
+    def get_from(self, query, selections=None, return_obj=False):
         """
           Returns a object filtered by a query
         """
         selections = selections or self.model_selections
         try:
             obj = query.first()
-            return _extract_selections(obj, selections)
+            if not return_obj:
+                return _extract_selections(obj, selections)
+            return obj
         finally:
             self._session.close()
             db.engine.dispose()
