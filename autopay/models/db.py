@@ -17,6 +17,7 @@ class Event(Base):
     check_out = Column(DateTime)
     user_rfid = Column(String(45), nullable=False)
     total_minutes = Column(Float)
+    cost = Column(Float)
 
     organization1 = relationship(u'Organization')
 
@@ -40,8 +41,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(45), nullable=False)
-    organization = Column(ForeignKey(u'organization.id'), nullable=False, index=True)
-    rfid = Column(String(45))
     role = Column(Integer)
     password = Column(String(100), nullable=False)
 
@@ -51,4 +50,16 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
+class Tag(Base):
+    __tablename__ = u'tag'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    user = Column(Integer, ForeignKey(u'user.id'), nullable=False)
+
+    organization = Column(Integer, ForeignKey(u'organization.id'), nullable=False)
+
+    tag = Column(String(45))
+
     organization1 = relationship(u'Organization')
+    user1 = relationship(u'User')
